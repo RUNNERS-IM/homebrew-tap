@@ -1,6 +1,6 @@
 cask "monitor" do
-  version "2.6.1030"
-  sha256 "6622de26a0fd3185b9c2829429564e539033943173cf884e098dfb59e3da5082"
+  version "2.6.1030.2"
+  sha256 "0d982bd402b2112a479d53968733dcadb437b378fe101c0d06ab00ef16952640"
 
   url "https://github.com/RUNNERS-IM/monitor/releases/download/v#{version}/Monitor-#{version}.dmg"
   name "Monitor"
