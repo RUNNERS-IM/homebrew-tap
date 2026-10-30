@@ -1,6 +1,9 @@
-# Monitor 의 최신 GitHub 릴리스를 보고 Casks/monitor.rb 의 버전과 sha256 을 맞춘다.
+# Monitor 의 최신 GitHub 릴리스를 보고 Casks/monitor.rb 를 그 버전으로 다시 쓴다.
 # Monitor 릴리스는 GitHub Actions 에서 나가는데, 그 토큰으로는 이 저장소에 쓸 수 없어서
 # 이쪽에서 30분마다 확인한다. 바로 맞추고 싶으면 Actions 에서 손으로 돌린다.
+#
+# Electron 판부터 DMG 가 CPU 마다 하나씩(Monitor-<태그>-mac-arm64.dmg, -x64.dmg) 나와서
+# 두 파일의 sha256 을 모두 받아 cask 를 통째로 다시 쓴다.
 name: Update Monitor
 
 on:
@@ -33,9 +36,44 @@ jobs:
             echo "이미 $VERSION 입니다."
             exit 0
           fi
-          gh release download "$TAG" --repo RUNNERS-IM/monitor --pattern "Monitor-$VERSION.dmg" --dir "$RUNNER_TEMP"
-          SHA=$(sha256sum "$RUNNER_TEMP/Monitor-$VERSION.dmg" | cut -d' ' -f1)
-          sed -i -e "s/^  version \".*\"$/  version \"$VERSION\"/" -e "s/^  sha256 \".*\"$/  sha256 \"$SHA\"/" Casks/monitor.rb
+          gh release download "$TAG" --repo RUNNERS-IM/monitor --pattern "Monitor-$VERSION-mac-*.dmg" --dir "$RUNNER_TEMP"
+          ARM=$(sha256sum "$RUNNER_TEMP/Monitor-$VERSION-mac-arm64.dmg" | cut -d' ' -f1)
+          INTEL=$(sha256sum "$RUNNER_TEMP/Monitor-$VERSION-mac-x64.dmg" | cut -d' ' -f1)
+          cat > Casks/monitor.rb <<CASK
+          cask "monitor" do
+            arch arm: "arm64", intel: "x64"
+
+            version "$VERSION"
+            sha256 arm:   "$ARM",
+                   intel: "$INTEL"
+
+            url "https://github.com/RUNNERS-IM/monitor/releases/download/v#{version}/Monitor-#{version}-mac-#{arch}.dmg"
+            name "Monitor"
+            desc "Menu bar monitor for CPU, memory, disk and what slows the computer down"
+            homepage "https://github.com/RUNNERS-IM/monitor"
+
+            livecheck do
+              url :url
+              strategy :github_latest
+            end
+
+            auto_updates true
+            depends_on macos: ">= :monterey"
+
+            app "Monitor.app"
+
+            zap trash: [
+              "~/Library/Application Support/Monitor",
+              "~/Library/Application Support/im.runners.monitor",
+              "~/Library/Caches/im.runners.monitor",
+              "~/Library/Caches/im.runners.monitor.ShipIt",
+              "~/Library/Logs/Monitor",
+              "~/Library/Preferences/im.runners.monitor.plist",
+              "~/Library/Saved Application State/im.runners.monitor.savedState",
+              "~/Library/WebKit/im.runners.monitor",
+            ]
+          end
+          CASK
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -am "monitor $VERSION"
