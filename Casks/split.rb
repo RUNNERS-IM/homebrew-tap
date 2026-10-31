@@ -1,6 +1,6 @@
 cask "split" do
-  version "2.6.1031.4"
-  sha256 "f509cb691aac97e8e37d2b0ae7390b6f2cdc75008e0e049631d2f176dacda536"
+  version "2.6.1101"
+  sha256 "5982117c2c6dfed71c138a8a05d7c6c8b31437cadc8aeca5cc28c0e5d1a3e397"
 
   url "https://github.com/RUNNERS-IM/split/releases/download/v#{version}/Split-#{version}.dmg"
   name "Split"
