@@ -1,9 +1,9 @@
 cask "monitor" do
   arch arm: "arm64", intel: "x64"
 
-  version "2.6.1101.5"
-  sha256 arm:   "e15e1878b30cc1e5e3b55e20f7d8226610116048bd13d1a4919e731e832e8e62",
-         intel: "b0606cc8f71a82d69923b94fe139dca7bf5946d4befd416e8e2566308677e707"
+  version "2.6.1102"
+  sha256 arm:   "11934686af9f35ff675390955cece128fe0230ddade05451385088dcf5e7ffbb",
+         intel: "d75568f73bf13562786aaed122cd1499593651b2011cea8b4d075d7ca1d7a30c"
 
   url "https://github.com/RUNNERS-IM/monitor/releases/download/v#{version}/Monitor-#{version}-mac-#{arch}.dmg"
   name "Monitor"
