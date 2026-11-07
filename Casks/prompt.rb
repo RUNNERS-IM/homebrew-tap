@@ -1,6 +1,6 @@
 cask "prompt" do
-  version "2.6.110703"
-  sha256 "65ea00fcbc6b8804acc1316597a8b8c1d6c9500cee1a9af7481ce76f2659d7ba"
+  version "2.6.110704"
+  sha256 "3e888385d442cbc4e3fbbc10b52344fd22bec9146aa716c8e08b38da9a0686e8"
 
   url "https://github.com/RUNNERS-IM/prompt/releases/download/v#{version}/prompt-macos-arm64.dmg"
   name "Prompt"
