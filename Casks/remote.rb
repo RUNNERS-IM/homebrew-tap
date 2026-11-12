@@ -1,9 +1,9 @@
 cask "remote" do
   arch arm: "arm64", intel: "x64"
 
-  version "2.6.110704"
-  sha256 arm:   "d6d44d6fb8bd5f5b99897413b08dde8fa5b1054003e62ed169d2093291b067b6",
-         intel: "260547e115157bd2f253e081406735b552ffb20141c88b1bba0b8f6fc022c9a3"
+  version "2.6.111301"
+  sha256 arm:   "1306a210b61551597723102847c34448a51efd251d65c9506603a80ddddfef65",
+         intel: "4914927aa13eda974153cad9a96b3d643d66952983ee8e056b7a3441a5466820"
 
   url "https://github.com/RUNNERS-IM/remote/releases/download/v#{version}/Remote-#{version}-mac-#{arch}.dmg"
   name "Remote"
