@@ -1,10 +1,14 @@
-# Remote 의 최신 GitHub 릴리스를 보고 Casks/remote.rb 를 그 버전으로 다시 쓴다.
-# Remote 릴리스는 GitHub Actions 에서 나가는데, 그 토큰으로는 이 저장소에 쓸 수 없어서
+# Remotrol 의 최신 GitHub 릴리스를 보고 Casks/remotrol.rb 를 그 버전으로 다시 쓴다.
+# Remotrol 릴리스는 GitHub Actions 에서 나가는데, 그 토큰으로는 이 저장소에 쓸 수 없어서
 # 이쪽에서 30분마다 확인한다. 바로 맞추고 싶으면 Actions 에서 손으로 돌린다.
 #
-# DMG 가 CPU 마다 하나씩(Remote-<태그>-mac-arm64.dmg, -x64.dmg) 나와서 두 파일의 sha256 을 모두 받아
-# cask 를 통째로 다시 쓴다. Remote 는 화면 기록(ScreenCaptureKit 스크린샷)을 쓰려고 macOS 14 이상만 받는다.
-name: Update Remote
+# DMG 가 CPU 마다 하나씩(Remotrol-<태그>-mac-arm64.dmg, -x64.dmg) 나와서 두 파일의 sha256 을 모두 받아
+# cask 를 통째로 다시 쓴다. Remotrol 은 화면 기록(ScreenCaptureKit 스크린샷)을 쓰려고 macOS 14 이상만 받는다.
+#
+# 2.6.111302 에서 이름이 Remote 에서 Remotrol 로 바뀌었다. 예전 cask 「remote」로 깔린 사람은
+# cask_renames.json 덕에 brew update 때 「remotrol」로 옮겨진다. 앱 설정 폴더 이름(Application Support/Remote)과
+# 번들 id(im.runners.remote)는 앱이 그대로 쓰므로 zap 목록도 그대로 둔다.
+name: Update Remotrol
 
 on:
   schedule:
@@ -15,7 +19,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-remote
+  group: update-remotrol
   cancel-in-progress: false
 
 jobs:
@@ -29,28 +33,28 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          TAG=$(gh release view --repo RUNNERS-IM/remote --json tagName --jq .tagName)
+          TAG=$(gh release view --repo RUNNERS-IM/remotrol --json tagName --jq .tagName)
           VERSION="${TAG#v}"
-          CURRENT=$(sed -n 's/^  version "\(.*\)"$/\1/p' Casks/remote.rb)
+          CURRENT=$(sed -n 's/^  version "\(.*\)"$/\1/p' Casks/remotrol.rb)
           if [ "$VERSION" = "$CURRENT" ]; then
             echo "이미 $VERSION 입니다."
             exit 0
           fi
-          gh release download "$TAG" --repo RUNNERS-IM/remote --pattern "Remote-$VERSION-mac-*.dmg" --dir "$RUNNER_TEMP"
-          ARM=$(sha256sum "$RUNNER_TEMP/Remote-$VERSION-mac-arm64.dmg" | cut -d' ' -f1)
-          INTEL=$(sha256sum "$RUNNER_TEMP/Remote-$VERSION-mac-x64.dmg" | cut -d' ' -f1)
-          cat > Casks/remote.rb <<CASK
-          cask "remote" do
+          gh release download "$TAG" --repo RUNNERS-IM/remotrol --pattern "Remotrol-$VERSION-mac-*.dmg" --dir "$RUNNER_TEMP"
+          ARM=$(sha256sum "$RUNNER_TEMP/Remotrol-$VERSION-mac-arm64.dmg" | cut -d' ' -f1)
+          INTEL=$(sha256sum "$RUNNER_TEMP/Remotrol-$VERSION-mac-x64.dmg" | cut -d' ' -f1)
+          cat > Casks/remotrol.rb <<CASK
+          cask "remotrol" do
             arch arm: "arm64", intel: "x64"
 
             version "$VERSION"
             sha256 arm:   "$ARM",
                    intel: "$INTEL"
 
-            url "https://github.com/RUNNERS-IM/remote/releases/download/v#{version}/Remote-#{version}-mac-#{arch}.dmg"
-            name "Remote"
+            url "https://github.com/RUNNERS-IM/remotrol/releases/download/v#{version}/Remotrol-#{version}-mac-#{arch}.dmg"
+            name "Remotrol"
             desc "See and click the screens of other computers, from the menu bar"
-            homepage "https://github.com/RUNNERS-IM/remote"
+            homepage "https://github.com/RUNNERS-IM/remotrol"
 
             livecheck do
               url :url
@@ -60,7 +64,7 @@ jobs:
             auto_updates true
             depends_on macos: :sonoma
 
-            app "Remote.app"
+            app "Remotrol.app"
 
             zap trash: [
               "~/Library/Application Support/Remote",
@@ -76,5 +80,6 @@ jobs:
           CASK
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "remote $VERSION"
+          git add -A Casks
+          git commit -m "remotrol $VERSION"
           git push
