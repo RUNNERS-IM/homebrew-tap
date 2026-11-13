@@ -7,7 +7,7 @@ cask "draw" do
 
   url "https://github.com/RUNNERS-IM/draw/releases/download/v#{version}/Draw-#{version}-mac-#{arch}.dmg"
   name "Draw"
-  desc "Draw on your screen while you present"
+  desc "Screen annotation tool for presentations and screen sharing"
   homepage "https://github.com/RUNNERS-IM/draw"
 
   livecheck do
