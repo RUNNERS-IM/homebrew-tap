@@ -1,9 +1,9 @@
 cask "draw" do
   arch arm: "arm64", intel: "x64"
 
-  version "2.6.111501"
-  sha256 arm:   "ed3471c9aff5902b6687d1209e412fd2e75adbe897a4fd975ab1cc9124a74f75",
-         intel: "f4f7e69816f7c79f917e7c7625365ed3d1fa4b5a2cae4df35b19d70465e4fe12"
+  version "2.6.111502"
+  sha256 arm:   "6dd19811d9daefaca9b18fbf4ceb164b283a55308df1a770b6215078af802d69",
+         intel: "2e1a9be926c3ab403fbb40e3b0ab966c9934d27e085b81f2bc47d4e4f570f465"
 
   url "https://github.com/RUNNERS-IM/draw/releases/download/v#{version}/Draw-#{version}-mac-#{arch}.dmg"
   name "Draw"
