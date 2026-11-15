@@ -1,9 +1,9 @@
 cask "remotrol" do
   arch arm: "arm64", intel: "x64"
 
-  version "2.6.111302"
-  sha256 arm:   "f4c7bd464b84ec21af6db91332647ee5c4a4ca35244f121697dcc190de36798a",
-         intel: "3d1438b16b4946cb671105534f35254ffa112b4a296ba007bffeb3c5acc3986b"
+  version "2.6.111502"
+  sha256 arm:   "d100f2ce3fbfff966c3633bed104443351dc169e523834db6ee909eed7176c25",
+         intel: "cd2e931b0bacf91d09a181e928460e6bb3912ef67a0a647905eef0ee0684347e"
 
   url "https://github.com/RUNNERS-IM/remotrol/releases/download/v#{version}/Remotrol-#{version}-mac-#{arch}.dmg"
   name "Remotrol"
